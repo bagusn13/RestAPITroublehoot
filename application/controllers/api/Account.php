@@ -17,7 +17,7 @@ class Account extends REST_Controller
 
   public function index_get()
   {
-    $account_id = $this->get('accounts_id');
+    $account_id = $this->get('account_id');
     if ($account_id == null) {
       $account = $this->Account_model->getAccount();
     } else {
@@ -67,12 +67,12 @@ class Account extends REST_Controller
   public function index_post()
   {
     $data = [
-      'oauth_provider' => $this->post('apps'),
+      'oauth_provider' => 'apps',
       'first_name'     => $this->post('first_name'),
       'last_name'      => $this->post('last_name'),
       'email'          => $this->post('email'),
       'password'       => base64_encode($this->post('password')),
-      'role'           => $this->post('role'),
+      'role'           => 'user',
       'locale'         => 'id',
       'created_at'     => date("Y-m-d H:i:s"),
       'modified_at'    => date("Y-m-d H:i:s"),
@@ -88,8 +88,8 @@ class Account extends REST_Controller
     } else {
       $this->response([
         'status'  => false,
-        'data'    => 'failed to create new data'
-      ], REST_Controller::HTTP_BAD_REQUEST);
+        'message' => 'failed to create new data'
+      ], REST_Controller::HTTP_OK);
     }
   }
 

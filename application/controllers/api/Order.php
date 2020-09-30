@@ -82,7 +82,7 @@ class Order extends REST_Controller
       'nomor_hp'              => $nomor_hp,
       'merk_laptop'           => $merk_laptop,
       'keterangan'            => $keterangan,
-      'tanggal_pengambilan'   => $tanggal_pengambilan,
+      'tanggal_pengambilan'   => date('Y-m-d', strtotime($tanggal_pengambilan)),
       'jam_pengambilan'       => $jam_pengambilan,
       'tanggal_pengembalian'  => NULL,
       'jam_pengembalian'      => NULL,
@@ -92,7 +92,6 @@ class Order extends REST_Controller
       'biaya_total'           => $biaya->biaya,
       'status_payment'        => 0,
       'tipe_laptop'           => $tipe_laptop,
-
     ];
 
     if ($this->Order_model->createOrder($data) > 0) {

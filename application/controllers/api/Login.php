@@ -15,23 +15,24 @@ class Login extends REST_Controller
     $this->load->model('Account_model');
   }
 
-  public function index_get()
+  public function index_post()
   {
-    $email = $this->get('email');
-    $password = $this->get('password');
+    $email    = $this->post('email');
+    $password = $this->post('password');
 
     $check = $this->Account_model->login($email, $password);
 
     if ($check) {
       $this->response([
         'status'  => true,
+        'message' => 'Login Success',
         'data'    => $check
       ], REST_Controller::HTTP_OK);
     } else {
       $this->response([
         'status'  => false,
-        'data'    => 'Email or password is incorrect '
-      ], REST_Controller::HTTP_NOT_FOUND);
+        'message' => 'Email or password is incorrect'
+      ], REST_Controller::HTTP_OK);
     }
   }
 }
