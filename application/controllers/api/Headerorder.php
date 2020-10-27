@@ -56,7 +56,7 @@ class Headerorder extends REST_Controller
     // Mengambil value dari form dengan method POST
     $account_id          = $this->post('account_id');
     $nama                = $this->post('nama');
-    $email                = $this->post('email');
+    $email               = $this->post('email');
     $merk_laptop         = $this->post('merk_laptop');
     $keterangan          = $this->post('keterangan');
     $nomor_hp            = $this->post('nomor_hp');
@@ -90,7 +90,7 @@ class Headerorder extends REST_Controller
       'created_at'            => date("Y-m-d H:i:s"),
       'modified_at'           => date("Y-m-d H:i:s"),
       'biaya_total'           => $biaya_total,
-      'status_payment'        => 0,
+      'status_payment'        => 1,
       'tipe_laptop'           => $tipe_laptop,
     ];
 

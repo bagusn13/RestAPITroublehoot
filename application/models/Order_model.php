@@ -19,7 +19,8 @@ class Order_model extends CI_Model
   public function getDetailOrder($tracking_key)
   {
     $this->db->select('orders.*,
-    kerusakan.nama_kerusakan');
+    kerusakan.nama_kerusakan,
+    kerusakan.jenis');
 
     $this->db->from('orders');
     //join dengan layanan

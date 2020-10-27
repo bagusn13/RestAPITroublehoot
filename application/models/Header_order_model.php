@@ -50,9 +50,9 @@ class Header_order_model extends CI_Model
   }
 
   //Edit Order
-  public function EditOrder($data, $header_order_id)
+  public function EditHeaderOrder($data, $tracking_key)
   {
-    $this->db->update('header_order', $data, ['header_order_id' => $header_order_id]);
+    $this->db->update('header_order', $data, ['tracking_key ' => $tracking_key]);
     return $this->db->affected_rows();
   }
 
