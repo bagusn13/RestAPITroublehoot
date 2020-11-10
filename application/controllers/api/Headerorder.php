@@ -92,6 +92,7 @@ class Headerorder extends REST_Controller
       'biaya_total'           => $biaya_total,
       'status_payment'        => 1,
       'tipe_laptop'           => $tipe_laptop,
+      'teknisi'               => 1,
     ];
 
     if ($this->Header_order_model->createHeaderOrder($data) > 0) {

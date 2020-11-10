@@ -11,6 +11,8 @@ class Header_order_model extends CI_Model
     $this->db->select('header_order.*,
                       tracking.status_tracking AS status_tracking,
                       laptop.merk AS merk,
+                      status_payment.payment_status,
+                      teknisi.nama_teknisi As teknisi,
                       SUM(orders.jumlah) AS total_item');
     $this->db->from('header_order');
     $this->db->where('header_order.account_id', $account_id);
@@ -18,6 +20,8 @@ class Header_order_model extends CI_Model
     $this->db->join('orders', 'orders.tracking_key = header_order.tracking_key', 'left');
     $this->db->join('tracking', 'tracking.tracking_id = header_order.tracking_id', 'left');
     $this->db->join('laptop', 'laptop.laptop_id = header_order.merk_laptop', 'left');
+    $this->db->join('status_payment', 'status_payment.payment_id = header_order.status_payment', 'left');
+    $this->db->join('teknisi', 'teknisi.teknisi_id = header_order.teknisi', 'left');
     // end join
     $this->db->group_by('header_order.header_order_id');
     $this->db->order_by('header_order_id', 'asc');

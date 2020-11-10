@@ -42,4 +42,16 @@ class Account_model extends CI_Model
     $q = $this->db->get();
     return $q->row();
   }
+
+  public function loginGoogle($email, $oauth_id)
+  {
+    $this->db->select('*');
+    $this->db->from('accounts');
+    $this->db->where(array(
+      'email'    => $email,
+      'oauth_id' => $oauth_id,
+    ));
+    $q = $this->db->get();
+    return $q->row();
+  }
 }
