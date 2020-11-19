@@ -25,7 +25,7 @@ class Logingoogle extends REST_Controller
     if ($check) {
       $this->response([
         'status'  => true,
-        'message' => 'Login Success',
+        'message' => 'Login sukses',
         'data'    => $check
       ], REST_Controller::HTTP_OK);
     } else {
@@ -43,31 +43,19 @@ class Logingoogle extends REST_Controller
         'active'         => 1,
       ];
 
-      if ($this->Account_model->createAccount($data) > 0) {
-        //ok
-        if ($check) {
-          $this->response([
-            'status'    => true,
-            'data'      => $check,
-            'message'   => 'new account has been created'
-          ], REST_Controller::HTTP_CREATED);
-        }
-      } else {
+      $create = $this->Account_model->createAccount($data);
+      if ($create == false) {
         $this->response([
           'status'  => false,
-          'message' => 'failed to create new data'
+          'message' => 'Email sudah digunakan'
         ], REST_Controller::HTTP_OK);
+      } else {
+        $this->response([
+          'status'    => true,
+          'data'      => $this->Account_model->loginGoogle($data['email'], $data['oauth_id']),
+          'message'   => 'Berhasil didaftarkan'
+        ], REST_Controller::HTTP_CREATED);
       }
     }
-
-
-
-
-    // else {
-    //   $this->response([
-    //     'status'  => false,
-    //     'message' => 'Email or oauth not found'
-    //   ], REST_Controller::HTTP_OK);
-    // }
   }
 }

@@ -79,17 +79,18 @@ class Account extends REST_Controller
       'active'         => 1,
     ];
 
-    if ($this->Account_model->createAccount($data) > 0) {
-      //ok
-      $this->response([
-        'status'    => true,
-        'message'   => 'new account has been created'
-      ], REST_Controller::HTTP_CREATED);
-    } else {
+    $create = $this->Account_model->createAccount($data);
+
+    if ($create == 0) {
       $this->response([
         'status'  => false,
-        'message' => 'failed to create new data'
+        'message' => 'Email sudah digunakan'
       ], REST_Controller::HTTP_OK);
+    } else {
+      $this->response([
+        'status'    => true,
+        'message'   => 'Berhasil didaftarkan'
+      ], REST_Controller::HTTP_CREATED);
     }
   }
 

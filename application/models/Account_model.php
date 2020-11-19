@@ -21,14 +21,27 @@ class Account_model extends CI_Model
 
   public function createAccount($data)
   {
-    $this->db->insert('accounts', $data);
-    return $this->db->affected_rows();
+    $email = $data['email'];
+    $q = $this->db->get_where('accounts', ['email' => $email])->result();
+    //var_dump($q);
+    if ($q) {
+      return false;
+    } else {
+      $this->db->insert('accounts', $data);
+      return true;
+    }
   }
 
   public function updateAccount($data, $accounts_id)
   {
     $this->db->update('accounts', $data, ['accounts_id' => $accounts_id]);
-    return $this->db->affected_rows();
+    $this->db->select('*');
+    $this->db->from('accounts');
+    $this->db->where(array(
+      'accounts_id'    => $accounts_id,
+    ));
+    $q = $this->db->get();
+    return $q->row();
   }
 
   public function login($email, $password)

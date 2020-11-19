@@ -20,7 +20,7 @@ class Konfirmasibayar extends REST_Controller
     $tracking_key = $this->post('tracking_key');
 
     if ($tracking_key != null) {
-      $config['upload_path']   = './assets/image/';
+      $config['upload_path']   = './assets/image/buktibayar/';
       $config['allowed_types'] = 'gif|jpg|png|jpeg';
       $config['max_size']      = '2400';
       $this->upload->initialize($config);
@@ -38,7 +38,7 @@ class Konfirmasibayar extends REST_Controller
 
         if ($q) {
           $this->response([
-            'status'  => true,
+            'status'     => true,
             'message'    => "Konfirmasi pembayaran sukses"
           ], REST_Controller::HTTP_OK);
         } else {
