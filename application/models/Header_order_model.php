@@ -24,7 +24,7 @@ class Header_order_model extends CI_Model
     $this->db->join('teknisi', 'teknisi.teknisi_id = header_order.teknisi', 'left');
     // end join
     $this->db->group_by('header_order.header_order_id');
-    $this->db->order_by('header_order_id', 'asc');
+    $this->db->order_by('header_order_id', 'DESC');
     $q = $this->db->get();
     return $q->result();
   }

@@ -32,7 +32,12 @@ class Editprofile extends REST_Controller
       // field name foto = picture
       // jika foto diedit
       if (!empty($_FILES['picture']['name'])) {
-        $config['upload_path']   = './assets/image/profile';
+        $config['upload_path']   = './assets/image/profile/' . $account_id . '/';
+        if (!is_dir($config['upload_path'])) {
+          mkdir($config['upload_path'], 0777, TRUE);
+        }
+
+
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
         $config['max_size']      = '2400';
         $this->upload->initialize($config);
@@ -43,6 +48,11 @@ class Editprofile extends REST_Controller
           $upload_gambar = array('upload_data' => $this->upload->data());
 
           if ($provider == 'google') {
+            if ($account[0]['picture']) {
+              if ($config['upload_path'] . $account[0]['picture']) {
+                unlink($config['upload_path'] . $account[0]['picture']);
+              }
+            }
 
             $data = array(
               'first_name'    => $firstname,
@@ -68,8 +78,10 @@ class Editprofile extends REST_Controller
               ], REST_Controller::HTTP_OK);
             }
           } else {
-            if ($account->picture != null) {
-              unlink('./assets/image/profile/' . $account->picture);
+            if ($account[0]['picture']) {
+              if ($config['upload_path'] . $account[0]['picture']) {
+                unlink($config['upload_path'] . $account[0]['picture']);
+              }
             }
             $data = array(
               'first_name'    => $firstname,

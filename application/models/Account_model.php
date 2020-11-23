@@ -35,7 +35,10 @@ class Account_model extends CI_Model
   public function updateAccount($data, $accounts_id)
   {
     $this->db->update('accounts', $data, ['accounts_id' => $accounts_id]);
-    $this->db->select('*');
+    $this->db->select(
+      'accounts.*,
+      CONCAT("http://192.168.1.2/troubleshoot/restapi/assets/image/profile/",accounts.accounts_id,"/",accounts.picture) AS picture'
+    );
     $this->db->from('accounts');
     $this->db->where(array(
       'accounts_id'    => $accounts_id,
@@ -46,7 +49,8 @@ class Account_model extends CI_Model
 
   public function login($email, $password)
   {
-    $this->db->select('*');
+    $this->db->select('accounts.*,
+    CONCAT("http://192.168.1.2/troubleshoot/restapi/assets/image/profile/",accounts.accounts_id,"/",accounts.picture) AS picture');
     $this->db->from('accounts');
     $this->db->where(array(
       'email'    => $email,
@@ -58,7 +62,8 @@ class Account_model extends CI_Model
 
   public function loginGoogle($email, $oauth_id)
   {
-    $this->db->select('*');
+    $this->db->select('accounts.*,
+    CONCAT("http://192.168.1.2/troubleshoot/restapi/assets/image/profile/",accounts.accounts_id,"/",accounts.picture) AS picture');
     $this->db->from('accounts');
     $this->db->where(array(
       'email'    => $email,
