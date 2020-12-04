@@ -13,6 +13,7 @@ class Headerorder extends REST_Controller
   {
     parent::__construct();
     $this->load->model('Header_order_model');
+    $this->load->model('Log_model');
   }
 
   // get riwayat belanja per user($id_user)
@@ -66,6 +67,8 @@ class Headerorder extends REST_Controller
     $tipe_laptop         = $this->post('tipe_laptop');
     $biaya_total         = $this->post('biaya_total');
     $tracking_key        = $this->post('tracking_key');
+    date_default_timezone_set('Asia/Jakarta');
+
 
     if ($tempat_bertemu == '') {
       $tempat_bertemu = 'UNJ';
@@ -95,45 +98,26 @@ class Headerorder extends REST_Controller
       'teknisi'               => 1,
     ];
 
+    $data_log = [
+      'email'      => $email,
+      'action'     => 'Melakukan Order',
+      'created_at' => date("Y-m-d H:i:s"),
+    ];
+
+
+
     if ($this->Header_order_model->createHeaderOrder($data) > 0) {
-      //ok
+      $this->Log_model->createLog($data_log);
+
       $this->response([
         'status'    => true,
-        'message'   => 'new order has been created'
+        'message'   => 'Sukses melakukan order'
       ], REST_Controller::HTTP_CREATED);
     } else {
       $this->response([
         'status'  => false,
-        'data'    => 'failed to create new order'
+        'data'    => 'Maaf terjadi masalah'
       ], REST_Controller::HTTP_OK);
     }
   }
-
-
-  // untuk batal order ?
-  // public function index_delete()
-  // {
-  //   $order_id = $this->delete('order_id');
-  //   if ($order_id == null) {
-  //     $this->response([
-  //       'status'  => false,
-  //       'message' => 'provide an order id!'
-  //     ], REST_Controller::HTTP_BAD_REQUEST);
-  //   } else {
-  //     if ($this->Order_model->deleteOrder($order_id) > 0) {
-  //       //ok
-  //       $this->response([
-  //         'status'      => true,
-  //         'account_id'  => $order_id,
-  //         'message'     => 'deleted'
-  //       ], REST_Controller::HTTP_OK);
-  //     } else {
-  //       //id not found
-  //       $this->response([
-  //         'status'  => false,
-  //         'message'    => 'order id not found'
-  //       ], REST_Controller::HTTP_BAD_REQUEST);
-  //     }
-  //   }
-  // }
 }

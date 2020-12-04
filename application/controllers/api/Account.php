@@ -13,6 +13,7 @@ class Account extends REST_Controller
   {
     parent::__construct();
     $this->load->model('Account_model');
+    $this->load->model('Log_model');
   }
 
   public function index_get()
@@ -23,7 +24,6 @@ class Account extends REST_Controller
     } else {
       $account = $this->Account_model->getAccount($account_id);
     }
-
 
     if ($account) {
       $this->response([
@@ -57,7 +57,7 @@ class Account extends REST_Controller
       } else {
         //id not found
         $this->response([
-          'status'  => false,
+          'status'     => false,
           'message'    => 'accounts id not found'
         ], REST_Controller::HTTP_BAD_REQUEST);
       }
@@ -66,6 +66,8 @@ class Account extends REST_Controller
 
   public function index_post()
   {
+    date_default_timezone_set('Asia/Jakarta');
+
     $data = [
       'oauth_provider' => 'apps',
       'first_name'     => $this->post('first_name'),
@@ -79,6 +81,12 @@ class Account extends REST_Controller
       'active'         => 1,
     ];
 
+    $data_log = [
+      'email'      => $this->post('email'),
+      'action'     => 'Daftar akun',
+      'created_at' => date("Y-m-d H:i:s"),
+    ];
+
     $create = $this->Account_model->createAccount($data);
 
     if ($create == 0) {
@@ -87,6 +95,8 @@ class Account extends REST_Controller
         'message' => 'Email sudah digunakan'
       ], REST_Controller::HTTP_OK);
     } else {
+      $this->Log_model->createLog($data_log);
+
       $this->response([
         'status'    => true,
         'message'   => 'Berhasil didaftarkan'

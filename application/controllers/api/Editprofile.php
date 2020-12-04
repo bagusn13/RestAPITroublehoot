@@ -12,6 +12,7 @@ class Editprofile extends REST_Controller
   {
     parent::__construct();
     $this->load->model('Account_model');
+    $this->load->model('Log_model');
   }
 
   public function index_post()
@@ -24,9 +25,14 @@ class Editprofile extends REST_Controller
     $phone        = $this->post('phone');
     $address      = $this->post('address');
     $provider     = $account[0]['oauth_provider'];
+    date_default_timezone_set('Asia/Jakarta');
     // kolom : accounts_id
     // kolom : modified_at
-
+    $data_log = [
+      'email'      => $email,
+      'action'     => 'Ubah profil',
+      'created_at' => date("Y-m-d H:i:s"),
+    ];
 
     if ($account_id != null) {
       // field name foto = picture
@@ -66,6 +72,8 @@ class Editprofile extends REST_Controller
             $q = $this->Account_model->updateAccount($data, $account_id);
 
             if ($q) {
+              $this->Log_model->createLog($data_log);
+
               $this->response([
                 'status'     => true,
                 'message'    => "Ubah profil sukses",
@@ -96,6 +104,8 @@ class Editprofile extends REST_Controller
             $q = $this->Account_model->updateAccount($data, $account_id);
 
             if ($q) {
+              $this->Log_model->createLog($data_log);
+
               $this->response([
                 'status'     => true,
                 'message'    => "Ubah profil sukses",
@@ -125,6 +135,8 @@ class Editprofile extends REST_Controller
           $q = $this->Account_model->updateAccount($data, $account_id);
 
           if ($q) {
+            $this->Log_model->createLog($data_log);
+
             $this->response([
               'status'     => true,
               'message'    => "Ubah profil sukses",
@@ -149,6 +161,8 @@ class Editprofile extends REST_Controller
           $q = $this->Account_model->updateAccount($data, $account_id);
 
           if ($q) {
+            $this->Log_model->createLog($data_log);
+
             $this->response([
               'status'     => true,
               'message'    => "Ubah profil sukses",

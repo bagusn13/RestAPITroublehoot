@@ -19,7 +19,7 @@ class Order extends REST_Controller
   // 
   public function index_get()
   {
-    $account_id = $this->get('account_id');
+    $account_id   = $this->get('account_id');
     $tracking_key = $this->get('tracking_key');
     if ($account_id != null) {
       $listOrder = $this->Order_model->getOrderHistory($account_id);
@@ -49,7 +49,6 @@ class Order extends REST_Controller
       }
     }
   }
-
 
   public function index_post()
   {

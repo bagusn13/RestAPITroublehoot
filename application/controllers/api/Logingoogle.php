@@ -13,19 +13,29 @@ class Logingoogle extends REST_Controller
   {
     parent::__construct();
     $this->load->model('Account_model');
+    $this->load->model('Log_model');
   }
 
   public function index_post()
   {
     $email    = $this->post('email');
     $oauth_id = $this->post('oauth_id');
+    date_default_timezone_set('Asia/Jakarta');
 
     $check = $this->Account_model->loginGoogle($email, $oauth_id);
 
+    $data_log = [
+      'email'      => $check->email,
+      'action'     => 'Login with google',
+      'created_at' => date("Y-m-d H:i:s"),
+    ];
+
     if ($check) {
+      $this->Log_model->createLog($data_log);
+
       $this->response([
         'status'  => true,
-        'message' => 'Login sukses',
+        'message' => 'Berhasil login',
         'data'    => $check
       ], REST_Controller::HTTP_OK);
     } else {
@@ -37,7 +47,7 @@ class Logingoogle extends REST_Controller
         'email'          => $this->post('email'),
         'role'           => 'user',
         'locale'         => 'id',
-        'picture'        => $this->post("picture"),
+        'picture'        => null,
         'created_at'     => date("Y-m-d H:i:s"),
         'modified_at'    => date("Y-m-d H:i:s"),
         'active'         => 1,
@@ -50,6 +60,8 @@ class Logingoogle extends REST_Controller
           'message' => 'Email sudah digunakan'
         ], REST_Controller::HTTP_OK);
       } else {
+        $this->Log_model->createLog($data_log);
+
         $this->response([
           'status'    => true,
           'data'      => $this->Account_model->loginGoogle($data['email'], $data['oauth_id']),

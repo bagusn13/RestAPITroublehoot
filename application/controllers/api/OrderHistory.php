@@ -18,7 +18,7 @@ class Orderhistory extends REST_Controller
 
   public function index_post()
   {
-    $account_id = $this->post('account_id');
+    $account_id   = $this->post('account_id');
     $tracking_key = $this->post('tracking_key');
 
     if ($account_id != null) {
@@ -30,7 +30,7 @@ class Orderhistory extends REST_Controller
         ], REST_Controller::HTTP_OK);
       } else {
         $this->response([
-          'status'  => false,
+          'status'     => false,
           'message'    => 'Order history for this account not found'
         ], REST_Controller::HTTP_OK);
       }
@@ -43,7 +43,7 @@ class Orderhistory extends REST_Controller
         ], REST_Controller::HTTP_OK);
       } else {
         $this->response([
-          'status'  => false,
+          'status'     => false,
           'message'    => 'Order history not found'
         ], REST_Controller::HTTP_OK);
       }
