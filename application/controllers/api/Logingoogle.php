@@ -25,7 +25,7 @@ class Logingoogle extends REST_Controller
     $check = $this->Account_model->loginGoogle($email, $oauth_id);
 
     $data_log = [
-      'email'      => $check->email,
+      'email'      => $email,
       'action'     => 'Login with google',
       'created_at' => date("Y-m-d H:i:s"),
     ];

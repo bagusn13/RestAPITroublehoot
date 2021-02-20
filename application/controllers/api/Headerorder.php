@@ -14,6 +14,16 @@ class Headerorder extends REST_Controller
     parent::__construct();
     $this->load->model('Header_order_model');
     $this->load->model('Log_model');
+
+    $config['mailtype'] = 'text';
+    $config['protocol'] = 'smtp';
+    $config['smtp_host'] = "ssl://smtp.gmail.com";
+    $config['smtp_user'] = 'troubleshootdotid@gmail.com';
+    $config['smtp_pass'] = 'troubleshootinaja';
+    $config['smtp_port'] = "465";
+    $config['newline'] = "\r\n";
+
+    $this->load->library('email', $config);
   }
 
   // get riwayat belanja per user($id_user)
@@ -67,8 +77,8 @@ class Headerorder extends REST_Controller
     $tipe_laptop         = $this->post('tipe_laptop');
     $biaya_total         = $this->post('biaya_total');
     $tracking_key        = $this->post('tracking_key');
+    $ongkir              = $this->post('ongkir');
     date_default_timezone_set('Asia/Jakarta');
-
 
     if ($tempat_bertemu == '') {
       $tempat_bertemu = 'UNJ';
@@ -96,6 +106,7 @@ class Headerorder extends REST_Controller
       'status_payment'        => 1,
       'tipe_laptop'           => $tipe_laptop,
       'teknisi'               => 1,
+      'ongkir'                => $ongkir,
     ];
 
     $data_log = [
@@ -104,8 +115,6 @@ class Headerorder extends REST_Controller
       'created_at' => date("Y-m-d H:i:s"),
     ];
 
-
-
     if ($this->Header_order_model->createHeaderOrder($data) > 0) {
       $this->Log_model->createLog($data_log);
 
@@ -113,6 +122,22 @@ class Headerorder extends REST_Controller
         'status'    => true,
         'message'   => 'Sukses melakukan order'
       ], REST_Controller::HTTP_CREATED);
+
+      //send notif email
+      $this->email->from('troubleshootdotid@gmail.com', 'Troubleshoot.id');
+      //$this->email->to('order.troubleshoot@gmail.com');
+      $this->email->to('bagusn1367@gmail.com');
+      $subject = "Pesanan Baru [#" . $tracking_key . "]";
+      $this->email->subject($subject);
+
+      $message = "Nama : " . $nama . "\n"; //ambil nama
+      $message .= "No.Hp : " . $nomor_hp . "\n"; //ambil no hp
+      $message .= "Laptop : " . $tipe_laptop . "\n";
+
+      $message .= "Total Harga: Rp " . number_format($biaya_total, 2, ',', '.');  //ambil harga
+      $this->email->message($message);
+      $this->email->send();
+      // end send notif email
     } else {
       $this->response([
         'status'  => false,

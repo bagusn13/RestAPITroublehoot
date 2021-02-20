@@ -33,10 +33,12 @@ class Header_order_model extends CI_Model
   public function getDetailOrder($tracking_key)
   {
     $this->db->select('header_order.*,
+                      laptop.merk AS merk,
                       SUM(orders.jumlah) AS total_item');
     $this->db->from('header_order');
     //join
     $this->db->join('orders', 'orders.tracking_key = header_order.tracking_key', 'left');
+    $this->db->join('laptop', 'laptop.laptop_id = header_order.merk_laptop', 'left');
     $this->db->join('accounts', 'accounts.accounts_id = header_order.account_id', 'left');
     //end join
     $this->db->group_by('header_order.header_order_id');

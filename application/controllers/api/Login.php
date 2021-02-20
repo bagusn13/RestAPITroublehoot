@@ -25,7 +25,7 @@ class Login extends REST_Controller
 
     if ($check) {
       $data_log = [
-        'email'      => $check->email,
+        'email'      => $email,
         'action'     => 'Login',
         'created_at' => date("Y-m-d H:i:s"),
       ];

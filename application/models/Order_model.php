@@ -32,6 +32,23 @@ class Order_model extends CI_Model
     return $q->result();
   }
 
+  //Ngambil detail order
+  public function getListKerusakan($tracking_key)
+  {
+    $this->db->select('orders.*,
+    kerusakan.nama_kerusakan,
+    kerusakan.jenis');
+
+    $this->db->from('orders');
+    //join dengan layanan
+    $this->db->join('kerusakan', 'kerusakan.kerusakan_id = orders.kerusakan_id', 'left');
+    //end join
+    $this->db->where('tracking_key', $tracking_key);
+    $this->db->order_by('order_id', 'asc');
+    $q = $this->db->get();
+    return $q->row();
+  }
+
   //Tambah Order
   public function createOrder($data)
   {
